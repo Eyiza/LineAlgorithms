@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import pandas as pd
 
 def draw_dda(point1, point2):
     x1, y1 = point1
@@ -10,7 +11,7 @@ def draw_dda(point1, point2):
 
     # Calculate the gradient
     if dx == 0:
-        gradient = 0
+        gradient = float('inf') # Infinite slope for vertical lines
     else:
         gradient = dy / dx
 
@@ -23,27 +24,39 @@ def draw_dda(point1, point2):
     
     # Initialize starting point
     x, y = x1, y1
-    x_points, y_points = [x], [y]
+    points = [(round(x), round(y))]
     
     for _ in range(steps):
         # Increment the x and y values
         x += x_increment
         y += y_increment
-        x_points.append(round(x))
-        y_points.append(round(y))
+        points.append((round(x), round(y)))
     
-    return x_points, y_points, gradient
+    return points, gradient
 
 
 # Example usage
-point1 = (1, 2)
-point2 = (8, 6)
+point1 = (2, 2)
+point2 = (6, 10)
 
 # Get the line points using DDA
-x_points, y_points, gradient = draw_dda(point1, point2)
+dda_points, gradient = draw_dda(point1, point2)
+
+# Dataframe to diplays the points
+data = {
+    "Step": list(range(len(dda_points))),
+    "DDA (x, y)": dda_points
+}
+df = pd.DataFrame(data)
+
+# Display the points
+print(df)
+
+# Unzip the points to plot the line
+x_points, y_points = zip(*dda_points)
 
 # Plot the line
-plt.plot(x_points, y_points, marker="+", color="blue")
+plt.plot(x_points, y_points, marker="+", color="blue", label="DDA Points")
 plt.title(f"DDA Line Drawing with gradient {gradient:.2f}")
 plt.xlabel("X-axis")
 plt.ylabel("Y-axis")
