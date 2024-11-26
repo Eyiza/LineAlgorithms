@@ -10,7 +10,7 @@ def draw_dda(point1, point2):
 
     # Calculate the gradient
     if dx == 0:
-        gradient = 1.0
+        gradient = 0
     else:
         gradient = dy / dx
 
